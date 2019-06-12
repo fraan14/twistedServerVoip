@@ -11,7 +11,7 @@ class EchoServerProtocol(Protocol):
     def connectionMade(self):
         log.msg('Se establecio una conexion con:{}'.format(self.transport.getPeer()))
         #ip = self.transport.getPeer().host
-        #log.msg("EL HOST ES "+str(ip))
+        
         self.transport.setTcpKeepAlive(1)
 
     def dataReceived(self,data):
