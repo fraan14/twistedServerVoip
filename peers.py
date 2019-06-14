@@ -32,13 +32,9 @@ class ActivePeers(object):
         for v in self.diccionario_de_usuarios.values():
             res.append(v.getSocket())
         return res
-    # def getListStringValues(self):
-    #     res=[]
-    #     for v in self.clientDict.values():
-    #         res.append(v)
-    #     return {"USUARIOS":res}
-    # def getConnectedClientsList(self):
-    #     l = []
-    #     for k in self.clientDict:
-    #         l.append(k)
-    #     return l
+
+    def getListaNombreIp(self):
+        res=dict()
+        for v in self.diccionario_de_usuarios.values():
+            res.update({v.getNombre():v.getIp()})
+        return res

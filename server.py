@@ -16,20 +16,8 @@ class EchoServerProtocol(Protocol):
 
     def dataReceived(self,data):
         guardar = peers.ActivePeers()
-        #procesar mensaje
-        #if (not "quit" in data):
-            #text = json.loads(data)
-            #log.msg("Cantidad de peers: {}".format(len(guardar.clientDictionary)))
-            #log.msg('Logueo de: '+text["NOMBRE"])
-            #v1 = text["NOMBRE"]
-            #fin Procesar Mensaje
-            #guardar.clientDictionary.update({self:v1})
-        #ip = self.transport.hostname
         respuesta = procesadorMensajes.procesarMensaje(data,self)
         self.transport.write(respuesta.encode())
-        #self.transport.write(guardar.getListStringValues().encode())
-        #self.transport.write(json.dumps(guardar.getPublicDict()).encode())
-        #log.msg("Clientes activos:{} ".format(guardar.getListStringValues()))
     
     def connectionLost(self,data):
         g = peers.ActivePeers()
@@ -39,13 +27,6 @@ class EchoServerProtocol(Protocol):
         lista_sockets = g.getListaDeSocketClientes()
         for s in lista_sockets:
             s.transport.write(lista_conectados.encode())
-        #g = peers.ActivePeers()
-        #g.removePeer(self)
-        #l = g.getConnectedClientsList()
-        #newConnected = json.dumps(g.getPublicDict())
-        #for c in l:
-        #    c.transport.write(toret.encode())
-        #log.msg("Clientes activos luego de deslogueo: {}".format(g.getListStringValues()))
 
 class EchoServerFactory(ServerFactory):
     def buildProtocol(self,addr):

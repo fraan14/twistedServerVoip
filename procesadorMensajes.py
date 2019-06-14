@@ -16,10 +16,10 @@ def procesarMensaje(mensaje, isock):
         return "error el en formato del mensaje, verifique su correctitud"
     if(comando == "LOGIN"):
         return procesarLogueo(mensaje_json, isock)
-    if(comando == "INICIO-LLAMADA"):
-        procesarInicioLLamada(mensaje)
     if(comando == "FIN-SESION"):
         return procesarFinSesion(isock) 
+    if(comando == "LISTA-CONECTADOS"):
+        return procesarListaConectados()
 
 def procesarLogueo(mensaje_json,isock):
     guardar = peers.ActivePeers()
@@ -35,6 +35,9 @@ def procesarFinSesion(isock):
     guardar = peers.ActivePeers()
     ip = isock.transport.hostname
     return guardar.removePeer(ip)
+
+def procesarListaConectados():
+    guardar = peers.ActivePeers()
+    return guardar.getListaNombreIp()
     
-def procesarInicioLLamada(mensaje):
-    pass
+
