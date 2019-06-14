@@ -29,4 +29,6 @@ class Usuario:
                 if(tipo.upper() == "DUAL"):
                     self.tipoConexion = tipo
     
-    
+class UsuarioEspecial(Usuario):
+    def __init__(self):
+        Usuario.__init__(self)

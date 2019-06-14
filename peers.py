@@ -5,7 +5,9 @@ class ActivePeers(object):
     def __new__(self):
         if not self._instance:
             self._instance = super(ActivePeers, self).__new__(self)
-            self.diccionario_de_usuarios = dict()
+            self.diccionario_de_usuarios = dict()                       #para usuarios comunes
+            self.diccionario_usuarios_especiales = dict()               #para usarios sigesi y voip
+            self.diccionario_usuarios_MIVoipRF = dict()
         return self._instance
 
     def addNewPeer(self,ip_key,usr_value):
