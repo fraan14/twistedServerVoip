@@ -16,6 +16,8 @@ def procesarMensaje(mensaje, isock):
         return "error el en formato del mensaje, verifique su correctitud"
     if(comando == "LOGIN"):
         return procesarLogueo(mensaje_json, isock)
+    if(comando == "LOGIN-ESPECIAL"):
+        return procesarLogueoEspecial(mensaje_json,isock)
     if(comando == "FIN-SESION"):
         return procesarFinSesion(isock) 
     if(comando == "LISTA-CONECTADOS"):
@@ -30,6 +32,16 @@ def procesarLogueo(mensaje_json,isock):
     usr.setIp(ip)
     usr.setSocketTcp(isock)
     return guardar.addNewPeer(ip,usr)
+
+def procesarLogueoEspecial(mensaje_json,isock):
+    guardar = peers.ActivePeers()
+    nombre = mensaje_json["NOMBRE"]
+    ip = isock.transport.hostname
+    usr = usuario.Usuario()
+    usr.setNombre(nombre)
+    usr.setIp(ip)
+    usr.setSocketTcp(isock)
+    return guardar.addNewSpecialPeer(ip,usr)
     
 def procesarFinSesion(isock):
     guardar = peers.ActivePeers()

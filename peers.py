@@ -8,6 +8,7 @@ class ActivePeers(object):
             self.diccionario_de_usuarios = dict()                       #para usuarios comunes
             self.diccionario_usuarios_especiales = dict()               #para usarios sigesi y voip
             self.diccionario_usuarios_MIVoipRF = dict()
+            self.ipHabilitadas=["192.168.2.140","192.168.1.141"]
         return self._instance
 
     def addNewPeer(self,ip_key,usr_value):
@@ -16,6 +17,17 @@ class ActivePeers(object):
             return "LOGUEO-EXITOSO"
         else:
             return "LOGUEO-EXISTENTE"
+
+    def addNewSpecialPeer(self,ip_key,usr_value):
+        if(ip_key in self.ipHabilitadas):
+            if(self.diccionario_usuarios_especiales.get(ip_key)==None):
+                self.diccionario_usuarios_especiales.update({ip_key:usr_value})
+                return "LOGUEO-EXITOSO"
+            else:
+                return "LOGUEO-EXISTENTE"
+        else:
+            return "PERMISO-DENEGADO"
+
     def removePeer(self,ip):
         if(self.diccionario_de_usuarios.get(ip)!=None):
             self.diccionario_de_usuarios.pop(ip)
