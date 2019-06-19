@@ -11,9 +11,9 @@ class ActivePeers(object):
             self.ipHabilitadas=["192.168.2.140","192.168.1.141"]
         return self._instance
 
-    def addNewPeer(self,ip_key,usr_value):
-        if(self.diccionario_de_usuarios.get(ip_key)==None):
-            self.diccionario_de_usuarios.update({ip_key:usr_value})
+    def addNewPeer(self,name_key,usr_value):
+        if(self.diccionario_de_usuarios.get(name_key)==None):
+            self.diccionario_de_usuarios.update({name_key:usr_value})
             return "LOGUEO-EXITOSO"
         else:
             return "LOGUEO-EXISTENTE"

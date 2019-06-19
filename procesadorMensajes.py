@@ -31,7 +31,7 @@ def procesarLogueo(mensaje_json,isock):
     usr.setNombre(nombre)
     usr.setIp(ip)
     usr.setSocketTcp(isock)
-    return guardar.addNewPeer(ip,usr)
+    return guardar.addNewPeer(nombre,usr)
 
 def procesarLogueoEspecial(mensaje_json,isock):
     guardar = peers.ActivePeers()
@@ -50,6 +50,6 @@ def procesarFinSesion(isock):
 
 def procesarListaConectados():
     guardar = peers.ActivePeers()
-    return guardar.getListaNombreIp()
+    return json.dumps(guardar.getListaNombreIp())
     
 
