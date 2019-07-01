@@ -19,17 +19,24 @@ class EchoServerProtocol(Protocol):
     def dataReceived(self,data):
         guardar = peers.ActivePeers()
         respuesta = procesadorMensajes.procesarMensaje(data,self)
+        if("LOGUEO-EXITOSO" in respuesta):
+            self.ActualizacionConectados()
         self.transport.write(respuesta.encode())
     
     def connectionLost(self,data):
         g = peers.ActivePeers()
-        
         finsesion = procesadorMensajes.procesarFinSesion(self)
         lista_conectados = json.dumps(g.getListaDeUsuariosConectados())
+        # lista_sockets = g.getListaDeSocketClientes()
+        # for s in lista_sockets:
+        #     s.transport.write(g.getListaNombreIp().encode())
+        log.msg('Se termino la conexion con:{}'.format(self.transport.getPeer()))
+    
+    def ActualizacionConectados(self):
+        g = peers.ActivePeers()
         lista_sockets = g.getListaDeSocketClientes()
         for s in lista_sockets:
             s.transport.write(g.getListaNombreIp().encode())
-        log.msg('Se termino la conexion con:{}'.format(self.transport.getPeer()))
 
 class EchoServerFactory(ServerFactory):
     def buildProtocol(self,addr):
