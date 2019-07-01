@@ -2,6 +2,7 @@ import sys
 import json
 import peers
 import respuesta
+import time
 import procesadorMensajes
 from twisted.python import log
 from twisted.internet import reactor
@@ -18,25 +19,33 @@ class EchoServerProtocol(Protocol):
 
     def dataReceived(self,data):
         guardar = peers.ActivePeers()
-        respuesta = procesadorMensajes.procesarMensaje(data,self)
-        if("LOGUEO-EXITOSO" in respuesta):
-            self.ActualizacionConectados()
-        self.transport.write(respuesta.encode())
-    
+        res = procesadorMensajes.procesarMensaje(data,self)
+        
+        if("LOGUEO-EXITOSO" in res):
+            lista = guardar.getListaNombreIpSinFormato()
+            res = respuesta.GenerarRespuestaJson("LOGUEO-EXITOSO",lista)  
+            self.ActualizacionConectados()      
+        self.transport.write(res.encode())
+        
+        
     def connectionLost(self,data):
         g = peers.ActivePeers()
         finsesion = procesadorMensajes.procesarFinSesion(self)
         lista_conectados = json.dumps(g.getListaDeUsuariosConectados())
         # lista_sockets = g.getListaDeSocketClientes()
         # for s in lista_sockets:
-        #     s.transport.write(g.getListaNombreIp().encode())
+        #     s.transport.write(g.getListaNombreIpSinFormato().encode())
+        self.ActualizacionConectados()
         log.msg('Se termino la conexion con:{}'.format(self.transport.getPeer()))
     
     def ActualizacionConectados(self):
         g = peers.ActivePeers()
         lista_sockets = g.getListaDeSocketClientes()
+        dic_conectados = g.getListaNombreIpSinFormato()
+        toSend = respuesta.GenerarRespuestaJson("LISTA-CONECTADOS",dic_conectados)
         for s in lista_sockets:
-            s.transport.write(g.getListaNombreIp().encode())
+            if(s != self ):
+                s.transport.write(toSend.encode())
 
 class EchoServerFactory(ServerFactory):
     def buildProtocol(self,addr):

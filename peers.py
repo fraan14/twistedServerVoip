@@ -20,7 +20,7 @@ class ActivePeers(object):
             return respuesta.GenerarRespuestaJson("LOGUEO-EXISTENTE")
 
     def addNewSpecialPeer(self,ip_key,usr_value):
-        if(ip_key in self.ipHbilitadas):
+        if(ip_key in self.ipHabilitadas):
             if(self.diccionario_usuarios_especiales.get(ip_key)==None):
                 self.diccionario_usuarios_especiales.update({ip_key:usr_value})
                 return respuesta.GenerarRespuestaJson("LOGUEO-EXITOSO")
@@ -53,3 +53,9 @@ class ActivePeers(object):
         for v in self.diccionario_de_usuarios.values():
             res.update({v.getNombre():v.getIp()})
         return respuesta.GenerarRespuestaJson("NUEVO-LISTADO",res)
+
+    def getListaNombreIpSinFormato(self):
+        res=dict()
+        for v in self.diccionario_de_usuarios.values():
+            res.update({v.getNombre():v.getIp()})
+        return res
