@@ -4,7 +4,6 @@ import json
 import peers
 import usuario
 
-
 def procesarMensaje(mensaje, isock):
     #primero se trata de verificar que el mensaje sea un json
     #y que contenga tanto nombre como formato para poder identificarlo
