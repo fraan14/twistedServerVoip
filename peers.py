@@ -1,11 +1,12 @@
 import usuario
+import respuesta
 
 class ActivePeers(object):
     _instance = None
     def __new__(self):
         if not self._instance:
             self._instance = super(ActivePeers, self).__new__(self)
-            self.diccionario_de_usuarios = dict()                       #para usuarios comunes
+            self.diccionario_de_usuarios = dict()                       #para usuarios comunes {ip,socket}
             self.diccionario_usuarios_especiales = dict()               #para usarios sigesi y voip
             self.diccionario_usuarios_MIVoipRF = dict()
             self.ipHabilitadas=["192.168.2.140","192.168.1.141"]
@@ -14,26 +15,26 @@ class ActivePeers(object):
     def addNewPeer(self,name_key,usr_value):
         if(self.diccionario_de_usuarios.get(name_key)==None):
             self.diccionario_de_usuarios.update({name_key:usr_value})
-            return "LOGUEO-EXITOSO"
+            return respuesta.GenerarRespuestaJson("LOGUEO-EXITOSO")
         else:
-            return "LOGUEO-EXISTENTE"
+            return respuesta.GenerarRespuestaJson("LOGUEO-EXISTENTE")
 
     def addNewSpecialPeer(self,ip_key,usr_value):
         if(ip_key in self.ipHabilitadas):
             if(self.diccionario_usuarios_especiales.get(ip_key)==None):
                 self.diccionario_usuarios_especiales.update({ip_key:usr_value})
-                return "LOGUEO-EXITOSO"
+                return respuesta.GenerarRespuestaJson("LOGUEO-EXITOSO")
             else:
-                return "LOGUEO-EXISTENTE"
+                return respuesta.GenerarRespuestaJson("LOGUEO-EXISTENTE")
         else:
-            return "PERMISO-DENEGADO"
+            return respuesta.GenerarRespuestaJson("PERMISO-DENEGADO")
 
     def removePeer(self,ip):
         if(self.diccionario_de_usuarios.get(ip)!=None):
             self.diccionario_de_usuarios.pop(ip)
-            return "USUARIO-DESLOGUEADO"
+            return respuesta.GenerarRespuestaJson("USUARIO-DESLOGUEADO")
         else:
-            return "USUARIO-INEXISTENTE"
+            return respuesta.GenerarRespuestaJson("USUARIO-INEXISTENTE")
 
     def getListaDeUsuariosConectados(self):
          res=[]
@@ -46,9 +47,9 @@ class ActivePeers(object):
         for v in self.diccionario_de_usuarios.values():
             res.append(v.getSocket())
         return res
-
+    #
     def getListaNombreIp(self):
         res=dict()
         for v in self.diccionario_de_usuarios.values():
             res.update({v.getNombre():v.getIp()})
-        return res
+        return respuesta.GenerarRespuestaJson("NUEVO-LISTADO",res)

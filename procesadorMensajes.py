@@ -2,6 +2,7 @@ import sys
 import twisted.internet.interfaces
 import json
 import peers
+import respuesta
 import usuario
 
 def procesarMensaje(mensaje, isock):
@@ -9,10 +10,10 @@ def procesarMensaje(mensaje, isock):
     #y que contenga tanto nombre como formato para poder identificarlo
     try:
         mensaje_json = json.loads(mensaje)
-        nombre = mensaje_json["NOMBRE"]
+        #nombre = mensaje_json["NOMBRE"]
         comando = mensaje_json['COMANDO']
     except: #aca va ael controlador de excepciones, si el mensaje no respeta el formato una respuesta es enviada al cliente indicando el formato del mensaje que se espera recibir
-        return "error el en formato del mensaje, verifique su correctitud"
+        return respuesta.GenerarRespuestaJson("ERROR","error el en formato del mensaje, verifique su correctitud")
     if(comando == "LOGIN"):
         return procesarLogueo(mensaje_json, isock)
     if(comando == "LOGIN-ESPECIAL"):
@@ -30,7 +31,7 @@ def procesarLogueo(mensaje_json,isock):
     usr.setNombre(nombre)
     usr.setIp(ip)
     usr.setSocketTcp(isock)
-    return guardar.addNewPeer(nombre,usr)
+    return guardar.addNewPeer(ip,usr)
 
 def procesarLogueoEspecial(mensaje_json,isock):
     guardar = peers.ActivePeers()
@@ -49,6 +50,6 @@ def procesarFinSesion(isock):
 
 def procesarListaConectados():
     guardar = peers.ActivePeers()
-    return json.dumps(guardar.getListaNombreIp())
+    return guardar.getListaNombreIp()
     
 

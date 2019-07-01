@@ -1,6 +1,7 @@
 import sys 
 import json
 import peers
+import respuesta
 import procesadorMensajes
 from twisted.python import log
 from twisted.internet import reactor
@@ -11,7 +12,8 @@ class EchoServerProtocol(Protocol):
     def connectionMade(self):
         log.msg('Se establecio una conexion con:{}'.format(self.transport.getPeer()))
         #ip = self.transport.getPeer().host
-        
+        res = respuesta.GenerarRespuestaJson("CONEXION-ESTABLECIDA")
+        self.transport.write(res.encode())
         self.transport.setTcpKeepAlive(1)
 
     def dataReceived(self,data):
@@ -27,6 +29,7 @@ class EchoServerProtocol(Protocol):
         lista_sockets = g.getListaDeSocketClientes()
         for s in lista_sockets:
             s.transport.write(lista_conectados.encode())
+        log.msg('Se termino la conexion con:{}'.format(self.transport.getPeer()))
 
 class EchoServerFactory(ServerFactory):
     def buildProtocol(self,addr):
