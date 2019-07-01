@@ -28,7 +28,7 @@ class EchoServerProtocol(Protocol):
         lista_conectados = json.dumps(g.getListaDeUsuariosConectados())
         lista_sockets = g.getListaDeSocketClientes()
         for s in lista_sockets:
-            s.transport.write(g.getListaNombreIp.encode())
+            s.transport.write(g.getListaNombreIp().encode())
         log.msg('Se termino la conexion con:{}'.format(self.transport.getPeer()))
 
 class EchoServerFactory(ServerFactory):

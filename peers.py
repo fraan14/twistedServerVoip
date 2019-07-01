@@ -20,7 +20,7 @@ class ActivePeers(object):
             return respuesta.GenerarRespuestaJson("LOGUEO-EXISTENTE")
 
     def addNewSpecialPeer(self,ip_key,usr_value):
-        if(ip_key in self.ipHabilitadas):
+        if(ip_key in self.ipHbilitadas):
             if(self.diccionario_usuarios_especiales.get(ip_key)==None):
                 self.diccionario_usuarios_especiales.update({ip_key:usr_value})
                 return respuesta.GenerarRespuestaJson("LOGUEO-EXITOSO")
